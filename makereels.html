@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NewsTok - Make Reels</title>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/responsive.css">
+</head>
+
+<body>
+
+    <header>
+        <div class="logosec">
+            <div class="logo">NewsTok admin</div>
+            <img src="images/menu.png" class="icn menuicn" id="menuicn" alt="menu-icon">
+        </div>
+
+        <div class="message">
+            <div class="dp">
+                <img style="width:25px;height: 25px;" src="images/user.png" class="dpicn" alt="dp">
+            </div>
+        </div>
+    </header>
+
+    <div class="main-container">
+        <div class="navcontainer">
+            <nav class="nav">
+                <div class="nav-upper-options">
+                    <div class="nav-option option1">
+                        <img src="images/dashboard.png" class="nav-img" alt="dashboard">
+                        <h3 onclick="location.href='index.html'"> Dashboard</h3>
+                    </div>
+
+                    <div class="option2 nav-option" onclick="location.href='news-scrap.html'">
+                        <img src="images/analysis.png" class="nav-img" alt="news scrap">
+                        <h3>News Scrap</h3>
+                    </div>
+
+                    <div style="background-color: #74c6a5; ;" class="nav-option option3" onclick="location.href='makereels.html'">
+                        <img src="images/news.png" class="nav-img" alt="newsreels">
+                        <h3>Newsreels</h3>
+                    </div>
+
+                    <div class="nav-option logout" onclick="location.href='login.html'">
+                        <img src="images/power-off.png" class="nav-img" alt="logout" >
+                        <h3>Logout</h3>
+                    </div>
+                </div>
+            </nav>
+        </div>
+
+        <div class="main">
+            <div class="report-container">
+                <div class="report-header">
+                    <h1 class="recent-Articles">Make News Reels</h1>
+                </div>
+
+                <div class="report-body">
+                    <table class="news-table">
+                        <thead>
+                            <tr>
+                                <th>Select</th>
+                                <th>Title</th>
+                                <th>Source</th>
+                                <th>Date</th>
+                                <th>Content</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><input type="checkbox" class="select-row"></td>
+                                <td>Sample News 1</td>
+                                <td>News Source 1</td>
+                                <td>2024-07-06</td>
+                                <td>Published</td>
+                            </tr>
+                            <tr>
+                                <td><input type="checkbox" class="select-row"></td>
+                                <td>Sample News 2</td>
+                                <td>News Source 2</td>
+                                <td>2024-07-05</td>
+                                <td>Published</td>
+                            </tr>
+                            <!-- Add more rows as needed -->
+                        </tbody>
+                    </table>
+                    <button style="width:100%;" id="makeReelsButton" class="view">Make Reels</button>
+                    <div id="loadingMessage" style="margin-top: 10px; display: none;">Loading...</div>
+                    <div id="statusMessage" style="margin-top: 10px;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/main.js"></script>
+    <script>
+        document.getElementById('makeReelsButton').addEventListener('click', function () {
+            const loadingMessage = document.getElementById('loadingMessage');
+            const statusMessage = document.getElementById('statusMessage');
+            
+            loadingMessage.style.display = 'block';
+            statusMessage.style.display = 'none';
+
+            setTimeout(function () {
+                loadingMessage.style.display = 'none';
+                const isSuccess = Math.random() > 0.2; // 80% chance of success
+                if (isSuccess) {
+                    statusMessage.innerHTML = 'Reels created successfully.';
+                    statusMessage.style.color = 'green';
+                } else {
+                    statusMessage.innerHTML = 'Failed to create reels.';
+                    statusMessage.style.color = 'red';
+                }
+                statusMessage.style.display = 'block';
+            }, 2000); // 2 seconds delay
+        });
+    </script>
+</body>
+</html>
