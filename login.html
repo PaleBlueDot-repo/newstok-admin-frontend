@@ -8,16 +8,12 @@
     <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="css/responsive.css">
     <link rel="stylesheet" href="css/login.css">
-
-    <style>
-      
-    </style>
 </head>
 
 <body>
     <div class="login-container">
         <h2>NewsTok Admin Login</h2>
-        <form action="/login" method="POST">
+        <form id="loginForm">
             <input type="text" id="email" name="email" placeholder="Email" required>
             <br><br>
             <input type="password" id="password" name="password" placeholder="Password" required>
@@ -25,6 +21,9 @@
             <input type="submit" value="Login">
         </form>
     </div>
+
+    <!-- Link to the external JavaScript file -->
+    <script src="js/login.js"></script>
 </body>
 
 </html>

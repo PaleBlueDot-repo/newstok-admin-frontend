@@ -12,8 +12,10 @@ document.getElementById("viewAllButton").addEventListener("click", function() {
 
 
 
+function logout() {
+    localStorage.removeItem('token');
 
-
-
+    window.location.href = 'login.html';
+}
 
 
