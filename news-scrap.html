@@ -54,25 +54,61 @@
                 <h1 style="color:#199961" class="scrap-title">News Scrap</h1>
                 <form id="scrapForm">
                     <label for="newsSource">Select News Source:</label>
-                    <select id="newsSource" name="newsSource" required>
-                        <option value="source1">News Source 1</option>
-                        <option value="source2">News Source 2</option>
-                        <option value="source3">News Source 3</option>
-                        <option value="source4">News Source 4</option>
+                    <select id="newsSource" name="newsSource" required onchange="showCategories()">
+                        <option value="">--Select a News Paper--</option>
+                        <option value="source1">Bangla 24livenewspaper</option>
+                        <option value="source2">Dailynewnation</option>
+                        
                     </select>
-                    <button style="    background-color: #199961;
-                    color: #ffffff;
-                    border: none;
-                    padding: 12px 20px;
-                    cursor: pointer;
-                    border-radius: 5px;
-                    font-size: 16px;" type="submit">Scrap News</button>
+            
+                    <div id="categoryContainer" style="display:none;">
+                        <label for="newsCategory">Select News Category:</label>
+                        <select id="newsCategory" name="newsCategory" required>
+                            <!-- Categories will be dynamically populated here -->
+                        </select>
+                    </div>
+            
+                    <button style="background-color: #199961; color: #ffffff; border: none; padding: 12px 20px; cursor: pointer; border-radius: 5px; font-size: 16px;" type="submit">Scrap News</button>
                 </form>
+            
                 <div id="scrapResult">
                     <!-- Example static value -->
                     <p>Scraping from News Source 1... Please wait.</p>
                 </div>
             </div>
+            
+            <script>
+               const categories = {
+        source1: ["Bangladesh", "World", "Sports", "Science-Technology", "Lifestyle", "Exception"],
+        source2: ["Business-Economy", "City", "Front-Page", "Back-Page", "Entertainment", "National", "Sports"]
+    };
+            
+                function showCategories() {
+                    const source = document.getElementById("newsSource").value;
+                    const categoryContainer = document.getElementById("categoryContainer");
+                    const newsCategory = document.getElementById("newsCategory");
+            
+                    if (source) {
+                        categoryContainer.style.display = "block";
+                        newsCategory.innerHTML = categories[source].map(cat => `<option value="${cat}">${cat}</option>`).join("");
+                    } else {
+                        categoryContainer.style.display = "none";
+                        newsCategory.innerHTML = "";
+                    }
+                }
+
+
+    document.getElementById("scrapForm").addEventListener("submit", function(event) {
+    event.preventDefault(); // Prevent the default form submission
+
+    const source = document.getElementById("newsSource").value;
+    const category = document.getElementById("newsCategory").value;
+
+    scrapNews(source, category);
+});
+
+            </script>
+            
 
             <div class="report-container">
                 <div class="report-header">
