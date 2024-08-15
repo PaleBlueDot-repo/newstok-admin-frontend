@@ -56,8 +56,8 @@
                     <label for="newsSource">Select News Source:</label>
                     <select id="newsSource" name="newsSource" required onchange="showCategories()">
                         <option value="">--Select a News Paper--</option>
-                        <option value="source1">Bangla 24livenewspaper</option>
-                        <option value="source2">Dailynewnation</option>
+                        <option value="Bangla 24livenewspaper" >Bangla 24livenewspaper</option>
+                        <option value="Dailynewnation">Dailynewnation</option>
                         
                     </select>
             
@@ -73,15 +73,15 @@
             
                 <div id="scrapResult">
                     <!-- Example static value -->
-                    <p>Scraping from News Source 1... Please wait.</p>
+                    <p id="scrapStatus"></p>
                 </div>
             </div>
             
             <script>
-               const categories = {
-        source1: ["Bangladesh", "World", "Sports", "Science-Technology", "Lifestyle", "Exception"],
-        source2: ["Business-Economy", "City", "Front-Page", "Back-Page", "Entertainment", "National", "Sports"]
-    };
+           const categories = {
+            "Bangla 24livenewspaper": ["Bangladesh", "World", "Sports", "Science-Technology", "Lifestyle", "Exception"],
+            "Dailynewnation": ["Business-Economy", "City", "Front-Page", "Back-Page", "Entertainment", "National", "Sports"]
+        };
             
                 function showCategories() {
                     const source = document.getElementById("newsSource").value;
@@ -99,10 +99,14 @@
 
 
     document.getElementById("scrapForm").addEventListener("submit", function(event) {
+
     event.preventDefault(); // Prevent the default form submission
 
     const source = document.getElementById("newsSource").value;
     const category = document.getElementById("newsCategory").value;
+
+    document.getElementById("scrapStatus").innerHTML="Scraping from Newspaper:  "+ source + ". Please wait"
+
 
     scrapNews(source, category);
 });
@@ -110,41 +114,7 @@
             </script>
             
 
-            <div class="report-container">
-                <div class="report-header">
-                    <h1 class="recent-Articles">Scraped News</h1>
-                </div>
-                <div class="report-body">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Title</th>
-                                <th>Source</th>
-                                <th>Date</th>
-                                <th>Content</th>
-                            </tr>
-                        </thead>
-                        <tbody id="scrapedNewsTable">
-                            <!-- Example static rows -->
-                            <tr>
-                                <td>Sample News 1</td>
-                                <td>News Source 1</td>
-                                <td>2024-07-06</td>
-                                <td>Published</td>
-                            </tr>
-                            <tr>
-                                <td>Sample News 2</td>
-                                <td>News Source 1</td>
-                                <td>2024-07-06</td>
-                                <td>Published</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
-
+         
     <script src="js/main.js"></script>
 </body>
 

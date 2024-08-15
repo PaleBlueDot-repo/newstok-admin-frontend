@@ -22,28 +22,46 @@ function logout() {
 
 
 function scrapNews(source, category) {
-    const data = {
-        newsSource: source,
-        newsCategory: category
-    };
-
     const token = localStorage.getItem('token');
 
-    fetch('/admin/scrap-news', {
+    const url = `http://localhost:8080/admin/getNews?name=${encodeURIComponent(source)}&category=${encodeURIComponent(category)}`;
+
+    fetch(url, {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json',
             'Authorization': `Bearer ${token}`
-        },
-        body: JSON.stringify(data)
+        }
     })
-    .then(response => response.json())
-    .then(result => {
-        // Handle the result returned by the backend
-        document.getElementById("scrapResult").innerHTML = `<p>${result.message}</p>`;
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json();
+    })
+    .then(newsList => {
+        const resultContainer = document.getElementById("scrapResult");
+        resultContainer.innerHTML = `
+        <h1 style="color:#199961;">📰 Scraped News is Ready!</h1>
+        <p>Latest news from <strong>${source}</strong> in the <strong>${category}</strong> category has been gathered.</p>
+        <p>Scroll down to explore the articles:</p>
+        <br>
+        <hr>
+        <br>
+    `;
+        newsList.forEach(news => {
+            resultContainer.innerHTML += `
+                <div>
+                    <h3 style="color:#199961;" >${news.title}</h3>
+                    <p>${news.article}</p>
+                    <a style="color:#199961;" href="${news.link}" target="_blank">Read more</a>
+                    <p><small>Published on: ${news.published}</small></p>
+                </div>
+                <hr>
+            `;
+        });
     })
     .catch(error => {
         console.error('Error:', error);
-        document.getElementById("scrapResult").innerHTML = `<p>Failed to scrap news. Please try again later.</p>`;
+        document.getElementById("scrapResult").innerHTML = `<p>Failed to scrape news. Please try again later.</p>`;
     });
 }
