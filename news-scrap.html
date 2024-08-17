@@ -97,20 +97,13 @@
                     }
                 }
 
-
     document.getElementById("scrapForm").addEventListener("submit", function(event) {
-
-    event.preventDefault(); // Prevent the default form submission
-
+    event.preventDefault(); 
     const source = document.getElementById("newsSource").value;
     const category = document.getElementById("newsCategory").value;
-
     document.getElementById("scrapStatus").innerHTML="Scraping from Newspaper:  "+ source + ". Please wait"
-
-
     scrapNews(source, category);
 });
-
             </script>
             
 

@@ -9,7 +9,35 @@
     <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="css/responsive.css">
     <script src="js/isValid.js"></script> 
+    <style>
+        /* Add styles for the dataTable */
+        .data-table-container {
+            margin-top: 20px;
+            width: 100%;
+            overflow-x: auto;
+        }
 
+        #dataTable {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 0;
+        }
+
+        #dataTable th, #dataTable td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        #dataTable th {
+            background-color: #f4f4f4;
+        }
+
+        #dataTable img {
+            max-width: 100px;
+            height: auto;
+        }
+    </style>
 </head>
 
 <body>
@@ -31,9 +59,9 @@
         <div class="navcontainer">
             <nav class="nav">
                 <div class="nav-upper-options">
-                    <div class="nav-option option1">
+                    <div onclick="location.href='index.html'" class="nav-option option1">
                         <img src="images/dashboard.png" class="nav-img" alt="dashboard">
-                        <h3 onclick="location.href='index.html'"> Dashboard</h3>
+                        <h3 > Dashboard</h3>
                     </div>
 
                     <div class="option2 nav-option" onclick="location.href='news-scrap.html'">
@@ -71,54 +99,57 @@
                                 <th>Content</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            <tr>
-                                <td><input type="checkbox" class="select-row"></td>
-                                <td>Sample News 1</td>
-                                <td>News Source 1</td>
-                                <td>2024-07-06</td>
-                                <td>Published</td>
-                            </tr>
-                            <tr>
-                                <td><input type="checkbox" class="select-row"></td>
-                                <td>Sample News 2</td>
-                                <td>News Source 2</td>
-                                <td>2024-07-05</td>
-                                <td>Published</td>
-                            </tr>
-                            <!-- Add more rows as needed -->
-                        </tbody>
+                        
+                            <tbody id="newsTableBody">
+
+                            </tbody>
+                        
                     </table>
                     <button style="width:100%;" id="makeReelsButton" class="view">Make Reels</button>
-                    <div id="loadingMessage" style="margin-top: 10px; display: none;">Loading...</div>
+                    <div id="loadingMessage" style="margin-top: 10px; display: none;">Reels are on the way! Please hold tight </div>
                     <div id="statusMessage" style="margin-top: 10px;"></div>
                 </div>
             </div>
-        </div>
+
+
+            <div id="tableclass" class="report-container">
+                <div class="report-header">
+                    <h1 class="recent-Articles">Created Reels</h1>
+                </div>
+
+                <div>
+                    <table id="dataTable">
+                        <thead>
+                            <tr>
+                                <th>News ID</th>
+                                <th>Background Color</th>
+                                <th>Font Color</th>
+                                <th>Font Family</th>
+                                <th>Image</th>
+                                <th>Music</th>
+                                <th>Summary</th>
+                                <th>Title</th>
+                            </tr>
+                        </thead>
+                                <tbody>
+                                   
+                                </tbody>
+                    </table>
+                   
+                </div>
+            </div>
+
+
+        </div> 
     </div>
+
 
     <script src="js/main.js"></script>
     <script>
-        document.getElementById('makeReelsButton').addEventListener('click', function () {
-            const loadingMessage = document.getElementById('loadingMessage');
-            const statusMessage = document.getElementById('statusMessage');
-            
-            loadingMessage.style.display = 'block';
-            statusMessage.style.display = 'none';
+        
+        fetchAndPopulateNews();
+        document.getElementById('makeReelsButton').addEventListener('click', sendSelectedNewsIds);
 
-            setTimeout(function () {
-                loadingMessage.style.display = 'none';
-                const isSuccess = Math.random() > 0.2; // 80% chance of success
-                if (isSuccess) {
-                    statusMessage.innerHTML = 'Reels created successfully.';
-                    statusMessage.style.color = 'green';
-                } else {
-                    statusMessage.innerHTML = 'Failed to create reels.';
-                    statusMessage.style.color = 'red';
-                }
-                statusMessage.style.display = 'block';
-            }, 2000); // 2 seconds delay
-        });
     </script>
 </body>
 </html>
