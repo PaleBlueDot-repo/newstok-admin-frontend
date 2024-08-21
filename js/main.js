@@ -169,3 +169,122 @@ async function sendSelectedNewsIds() {
     }
 }
 
+
+function showModal(data) {
+    const modal = document.createElement('div');
+    modal.className = 'modal';
+
+    modal.innerHTML = `
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <h2>Details for NewsId_${data.reelsId}</h2>
+            <p><strong>Background Color:</strong> ${data.background_color}</p>
+            <p><strong>Font Color:</strong> ${data.font_color}</p>
+            <p><strong>Font Family:</strong> ${data.font_family}</p>
+            <p><strong>Image:</strong><br><img src="${data.image}" alt="Image" style="width:100%; max-height: 300px; object-fit: contain;"></p>
+            <p><strong>Summary:</strong> ${data.summary}</p>
+            <p><strong>Title:</strong> ${data.title}</p>
+        </div>
+    `;
+
+    document.body.appendChild(modal);
+
+    // Close the modal
+    modal.querySelector('.close-button').addEventListener('click', () => {
+        modal.remove();
+    });
+
+    // Remove the modal when clicking outside of the modal content
+    window.addEventListener('click', (event) => {
+        if (event.target === modal) {
+            modal.remove();
+        }
+    });
+}
+
+
+async function showReelDetails(reelsId) {
+    try {
+        const token = localStorage.getItem('token'); // Retrieve the token from localStorage
+
+        const response = await fetch(`http://localhost:8080/admin/getReelDetails/${reelsId}`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`, // Include the token in the Authorization header
+                'Content-Type': 'application/json'
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+
+        const data = await response.json();
+
+        // Create a modal or popup to display the details
+        showModal(data);
+
+    } catch (error) {
+        console.error('Error fetching reel details:', error);
+    }
+}
+
+
+
+// Function to format numbers with commas
+function formatNumber(number) {
+    return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+
+async function updateDashboard() {
+    try {
+        const token = localStorage.getItem('token'); // Retrieve the token from localStorage
+
+        const response = await fetch('http://localhost:8080/admin/getDashboard', {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`, // Include the token in the Authorization header
+                'Content-Type': 'application/json'
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+
+        const data = await response.json();
+
+        document.querySelector('.box1 .topic-heading').textContent = data.newsReel_Views;
+        document.querySelector('.box2 .topic-heading').textContent = formatNumber(data.likes);
+        document.querySelector('.box3 .topic-heading').textContent = formatNumber(data.watchtime);
+        document.querySelector('.box4 .topic-heading').textContent = formatNumber(data.published);
+
+        const itemsContainer = document.querySelector('.report-body .items');
+        itemsContainer.innerHTML = ''; // Clear existing items
+
+        data.reelsList.forEach(reel => {
+            const item = document.createElement('div');
+            item.className = 'item1';
+
+            item.innerHTML = `
+<h3 style="color:green; cursor:pointer;" class="t-op-nextlvl" data-reels-id="${reel.reelsId}" onclick="showReelDetails(${reel.reelsId})">
+    reelsId_${reel.reelsId}
+</h3>
+                <h3 class="t-op-nextlvl">${formatNumber(reel.views)}</h3>
+                <h3 class="t-op-nextlvl">${formatNumber(reel.likes)}</h3>
+                <h3 class="t-op-nextlvl label-tag">${reel.status === '1' ? 'Published' : 'Unpublished'}</h3>
+            `;
+
+            itemsContainer.appendChild(item);
+        });
+
+     
+
+    } catch (error) {
+        console.error('Error fetching dashboard data:', error);
+    }
+}
+
+
+
+
