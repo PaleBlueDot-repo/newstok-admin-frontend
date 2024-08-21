@@ -262,21 +262,22 @@ async function updateDashboard() {
         const itemsContainer = document.querySelector('.report-body .items');
         itemsContainer.innerHTML = ''; // Clear existing items
 
-        data.reelsList.forEach(reel => {
+        data.reelsList.slice(0, 10).forEach(reel => {
             const item = document.createElement('div');
             item.className = 'item1';
-
+        
             item.innerHTML = `
-<h3 style="color:green; cursor:pointer;" class="t-op-nextlvl" data-reels-id="${reel.reelsId}" onclick="showReelDetails(${reel.reelsId})">
-    reelsId_${reel.reelsId}
-</h3>
+                <h3 style="color:green; cursor:pointer;" class="t-op-nextlvl" data-reels-id="${reel.reelsId}" onclick="showReelDetails(${reel.reelsId})">
+                    reelsId_${reel.reelsId}
+                </h3>
                 <h3 class="t-op-nextlvl">${formatNumber(reel.views)}</h3>
                 <h3 class="t-op-nextlvl">${formatNumber(reel.likes)}</h3>
                 <h3 class="t-op-nextlvl label-tag">${reel.status === '1' ? 'Published' : 'Unpublished'}</h3>
             `;
-
+        
             itemsContainer.appendChild(item);
         });
+        
 
      
 
