@@ -105,6 +105,8 @@ async function fetchAndPopulateNews() {
     }
 }
 
+
+
 async function sendSelectedNewsIds() {
     const tableclass=document.getElementById("tableclass");
 
@@ -140,10 +142,10 @@ async function sendSelectedNewsIds() {
         const table = document.getElementById('dataTable');
         const tbody = table.querySelector('tbody');
         tbody.innerHTML = '';  // Clear existing rows
-
+       
         result.forEach(reel => {
             const row = document.createElement('tr');
-
+        
             // Add columns for each piece of data
             row.innerHTML = `
                 <td>${reel.newsId || 'N/A'}</td>
@@ -151,13 +153,22 @@ async function sendSelectedNewsIds() {
                 <td>${reel.font_color || 'N/A'}</td>
                 <td>${reel.font_family || 'N/A'}</td>
                 <td><img src="data:image/jpeg;base64,${reel.image}" alt="Image" style="width:100px;height:auto;"></td>
-                <td>${reel.music || 'N/A'}</td>
+                <td>
+                    ${reel.music 
+                        ? `<audio controls>
+                            <source src="data:audio/mp3;base64,${reel.music}" type="audio/mpeg">
+                            Your browser does not support the audio element.
+                        </audio>`
+                        : 'N/A'
+                    }
+                </td>
                 <td>${reel.summary || 'N/A'}</td>
                 <td>${reel.title || 'N/A'}</td>
             `;
-
+        
             tbody.appendChild(row);
         });
+        
 
         document.getElementById('statusMessage').innerText = 'Data successfully loaded.';
         tableclass.style.display='block';
@@ -285,6 +296,7 @@ async function updateDashboard() {
         console.error('Error fetching dashboard data:', error);
     }
 }
+
 
 
 
