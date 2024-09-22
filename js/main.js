@@ -1,6 +1,12 @@
 let menuicn = document.querySelector(".menuicn");
 let nav = document.querySelector(".navcontainer");
 
+const loadingSpinner = document.createElement('div');
+loadingSpinner.className = 'loading-spinner';
+loadingSpinner.innerText = 'Loading...';
+document.body.appendChild(loadingSpinner);
+
+
 menuicn.addEventListener("click", () => {
     nav.classList.toggle("navclose");
 })
@@ -59,7 +65,7 @@ function scrapNews(source, category) {
         });
     })
     .catch(error => {
-        console.error('Error:', error);
+        console.error('Error:', error.message);
         document.getElementById("scrapResult").innerHTML = `<p>Failed to scrape news. Please try again later.</p>`;
     });
 }
@@ -100,7 +106,7 @@ async function fetchAndPopulateNews() {
                     <button class="update-btn" data-id="${news.id}" style="background-color: #199961;color:white;">Update</button>
                     <button class="save-btn" data-id="${news.id}" style="display: none; background-color:#199961;color:white;">Save</button>
                     <button class="delete-btn" data-id="${news.id}" style="background-color: red;color:white;">Delete</button>
-                    <button class="create-btn" data-id="${news.id}" style="background-color: red;color:white;">Create reel</button>
+                    <button class="create-btn" data-id="${news.id}" style="background-color: #199961;color:white;">Create reel</button>
 
                 </td>
             `;
@@ -214,26 +220,83 @@ async function deleteNews(newsId) {
 }
 
 async function createReel(newsId) {
-    const token = localStorage.getItem('token');
+    if (!newsId) {
+        alert('No news selected!');
+        return;
+    }
+
+    // Convert the single newsId into an array
+    const selectedIds = [newsId];
+    console.log(selectedIds);
 
     try {
-        const response = await fetch(`http://localhost:8080/admin/createReel/${newsId}`, {
+        // Show loading message
+        document.getElementById('loadingMessage').style.display = 'block';
+        loadingSpinner.style.display = 'block';
+        tableclass.style.display = 'none'; // Hide the table initially
+        const token = localStorage.getItem('token');  // Retrieve the token from localStorage
+
+        // Make the POST request to the backend
+        const response = await fetch('http://localhost:8080/admin/getAllReels', {
             method: 'POST',
             headers: {
-                'Authorization': `Bearer ${token}`
-            }
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`  // Include the token in the Authorization header
+            },
+            body: JSON.stringify({ ids: selectedIds }),  // Send selectedIds as an array
         });
 
-        if (response.ok) {
-            console.log('Reels item created successfully.');
-            await fetchAndPopulateNews();  // Refresh the table after deleting
-        } else {
-            throw new Error('Error creating Reel news item');
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
         }
+
+        const result = await response.json();
+      
+
+        // Show the table and populate it with data
+        const table = document.getElementById('dataTable');
+        const tbody = table.querySelector('tbody');
+        tbody.innerHTML = '';  
+
+        result.forEach(reel => {
+            const row = document.createElement('tr');
+
+            
+            row.innerHTML = `
+                <td>${reel.newsId || 'N/A'}</td>
+                <td>${reel.background_color || 'N/A'}</td>
+                <td>${reel.font_color || 'N/A'}</td>
+                <td>${reel.font_family || 'N/A'}</td>
+                <td><img src="data:image/jpeg;base64,${reel.image}" alt="Image" style="width:100px;height:auto;"></td>
+                <td>
+                    ${reel.music 
+                        ? `<audio controls>
+                            <source src="data:audio/mp3;base64,${reel.music}" type="audio/mpeg">
+                            Your browser does not support the audio element.
+                        </audio>`
+                        : 'N/A'
+                    }
+                </td>
+                <td>${reel.summary || 'N/A'}</td>
+                <td>${reel.title || 'N/A'}</td>
+            `;
+            tbody.appendChild(row);
+        });
+
+        document.getElementById('statusMessage').innerText = 'Reel created successfully.';
+        tableclass.style.display = 'block';  // Show the table class
+        table.style.display = 'table';  // Make sure the table is displayed
+        table.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
     } catch (error) {
-        console.error('Error creating Reel :', error.message);
+        document.getElementById('statusMessage').innerText = `Error: ${error.message}`;
+    } finally {
+        document.getElementById('loadingMessage').style.display = 'none';  
+        loadingSpinner.style.display = 'none';
+
     }
 }
+
 
 
 
@@ -301,7 +364,7 @@ async function sendSelectedNewsIds() {
         });
         
 
-        document.getElementById('statusMessage').innerText = 'Data successfully loaded.';
+        document.getElementById('statusMessage').innerText = 'Reels created successfully.';
         tableclass.style.display='block';
         table.style.display = 'table';  
     } catch (error) {
@@ -312,11 +375,8 @@ async function sendSelectedNewsIds() {
 }
 
 
-// index.html and viewall.html pae
-const loadingSpinner = document.createElement('div');
-loadingSpinner.className = 'loading-spinner';
-loadingSpinner.innerText = 'Loading...';
-document.body.appendChild(loadingSpinner);
+
+
 
 function showModal(data) {
     
@@ -612,7 +672,7 @@ async function updateDashboard() {
      
 
     } catch (error) {
-        console.error('Error fetching dashboard data:', error);
+        console.error('Error fetching dashboard data:', error.message);
     }
 }
 
